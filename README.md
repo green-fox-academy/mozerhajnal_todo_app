@@ -1,4 +1,4 @@
-# mozerhajnal_todo_app
+# Hajnal's TODO APP
 
 # Opciók kiíratása
-Következőképp indítható 'node app.js'
+Következőképp indítható: 'node app.js'

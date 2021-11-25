@@ -1,4 +1,7 @@
+import fs from 'fs';
+
 export default class TodoApp{
+    todoList = [];
 
     constructor(args){
         this.args = args;
@@ -25,18 +28,37 @@ export default class TodoApp{
         
     }
 
-    list(tasks){
-        if(tasks.length === 0){
+    saveInitValues(todo){
+        todo.forEach(element => this.todoList.push(element));
+    }
+
+    list(){
+        if(this.todoList.length === 0){
             console.log("Nincs mára tennivalód! :)");
         }
-        tasks.forEach((element, index) => {
+        this.todoList.forEach((element, index) => {
             console.log(index+1, '-', element);
         })
     }
 
-    run(tasks){
+    addNewToDo(){
+        this.args.filter((element, index) => {
+            if(index === 1){
+                this.todoList.push(element);
+            }
+        });
+    }
+
+    saveInFile(){
+        fs.writeFileSync('./data/todos.json', JSON.stringify(this.todoList));
+    }
+
+    run(){
         if (this.args.includes('-l')) {
-            this.list(tasks);
+            this.list();
+        }else if(this.args.includes('-a')){
+            this.addNewToDo();
+            this.saveInFile();
         }
     }
 

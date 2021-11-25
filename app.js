@@ -1,6 +1,7 @@
 import TodoApp from "./TodoApp.js";
 const argv = process.argv.slice(2);
 import fs from 'fs';
+//console.log(argv);
 
 const app = new TodoApp(argv);
 console.log('$ todo: \n');
@@ -14,7 +15,6 @@ try {
 }
 const parsedContent = JSON.parse(fileContent);
 
-console.log('\n$ todo -l:\n');
-
+app.saveInitValues(parsedContent);
 app.run(parsedContent);
 

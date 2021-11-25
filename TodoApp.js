@@ -26,6 +26,9 @@ export default class TodoApp{
     }
 
     list(tasks){
+        if(tasks.length === 0){
+            console.log("Nincs mára tennivalód! :)");
+        }
         tasks.forEach((element, index) => {
             console.log(index+1, '-', element);
         })

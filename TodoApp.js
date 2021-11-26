@@ -1,5 +1,5 @@
-import fs from 'fs';
 import Todo from "./Todo.js"
+import {saveInFile} from "./fileoperation.js"
 
 export default class TodoApp{
     todoList = [];
@@ -48,31 +48,45 @@ export default class TodoApp{
         this.args.filter((element, index) => {
             if(index === 1){
                 this.todoList.push(new Todo(element));
+                saveInFile(this.todoList);
+                console.log(`${element} was added!`);
             }
         });
-    }
-
-    saveInFile(){
-        fs.writeFileSync('./data/todos.json', JSON.stringify(this.todoList));
     }
 
     completeTask(){
         this.args.filter((element, index) => {
             if(index === 1){
                 this.todoList[element-1].status = 1;
+                saveInFile(this.todoList);
+                console.log(`${this.todoList[element-1].task} completed!`);
+            }
+        });
+    }
+
+    removeTask(){
+        this.args.filter((element, index) => {
+            if(index === 1){
+                const removedItem = this.todoList[element-1].task;
+                this.todoList.splice([element-1],1);
+                saveInFile(this.todoList);
+                console.log(`${removedItem} removed!`);
             }
         });
     }
 
     run(){
-        if (this.args.includes('-l')) {
+        if(!this.args.length){ 
+            this.printUserGuide();
+        }else if (this.args.includes('-l')) {
             this.list();
         }else if(this.args.includes('-a')){
             this.addNewToDo();
-            this.saveInFile();
         }else if(this.args.includes('-c')){
             this.completeTask();
-            this.saveInFile();
+        }else if(this.args.includes('-r')){
+            this.removeTask();
+
         }
     }
 

@@ -86,7 +86,9 @@ export default class TodoApp{
             this.completeTask();
         }else if(this.args.includes('-r')){
             this.removeTask();
-
+        }else{
+            console.log("Nem támogatott argumentum!");
+            this.printUserGuide();
         }
     }
 

@@ -45,6 +45,9 @@ export default class TodoApp{
     }
 
     addNewToDo(){
+        if(this.args.length === 1){
+            console.log("Nem lehetséges új feladat hozzáadása: nincs megadva a feladat!");
+        }
         this.args.filter((element, index) => {
             if(index === 1){
                 this.todoList.push(new Todo(element));

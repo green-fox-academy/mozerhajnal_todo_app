@@ -3,6 +3,7 @@ import { saveInFile } from "./fileoperation.js"
 
 export default class TodoApp {
     todoList = [];
+    isCalled = false;
 
     constructor(args) {
         this.args = args;
@@ -57,7 +58,31 @@ export default class TodoApp {
         });
     }
 
+    handleInvalidArgument(array){
+        let word;
+        (array.indexOf('-r')!==-1)? word = "az eltávolítás" : word = "a feladat végrehajtása";
+        if(array.length === 1){
+            this.isCalled = true;
+            return console.log(`Nem lehetséges ${word}: nem adott meg indexet!`);
+        }
+        array.filter((element, index) => {
+            if (index === 1) {
+                if (element > array.length) {
+                    this.isCalled = true;
+                    return console.log(`Nem lehetséges ${word}: túlindexelési probléma adódott!`);
+                } else if (isNaN(element)) {
+                    this.isCalled = true;
+                    return console.log(`Nem lehetséges ${word}: a megadott index nem szám!`)
+                }
+            }
+        });        
+    }
+
     completeTask() {
+        this.handleInvalidArgument(this.args);
+        if(this.isCalled){
+            return;
+        }
         this.args.filter((element, index) => {
             if (index === 1) {
                 this.todoList[element - 1].status = 1;
@@ -68,16 +93,12 @@ export default class TodoApp {
     }
 
     removeTask() {
-        if (this.args.length === 1) {
-            return console.log("Nem lehetséges az eltávolítás: nem adott meg indexet!");
+        this.handleInvalidArgument(this.args);
+        if(this.isCalled){
+            return;
         }
         this.args.filter((element, index) => {
             if (index === 1) {
-                if (element > this.todoList.length) {
-                    return console.log("Nem lehetséges az eltávolítás: túlindexelési probléma adódott!");
-                } else if (isNaN(element)) {
-                    return console.log("Nem lehetséges az eltávolítás: a megadott index nem szám!")
-                }
                 const removedItem = this.todoList[element - 1].task;
                 this.todoList.splice([element - 1], 1);
                 saveInFile(this.todoList);

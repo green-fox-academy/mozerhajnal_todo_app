@@ -16,5 +16,5 @@ try {
 const parsedContent = JSON.parse(fileContent);
 
 app.saveInitValues(parsedContent);
-app.run(parsedContent);
+app.run();
 

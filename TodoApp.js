@@ -1,4 +1,5 @@
 import fs from 'fs';
+import Todo from "./Todo.js"
 
 export default class TodoApp{
     todoList = [];
@@ -24,12 +25,14 @@ export default class TodoApp{
         -c   Teljesít egy feladatot';
         
         return this.print(message);      
-
         
     }
 
     saveInitValues(todo){
-        todo.forEach(element => this.todoList.push(element));
+        todo.forEach(element => {
+            if(this.todoList.indexOf(element) > -1){}
+                this.todoList.push(element);
+        });
     }
 
     list(){
@@ -37,14 +40,14 @@ export default class TodoApp{
             console.log("Nincs mára tennivalód! :)");
         }
         this.todoList.forEach((element, index) => {
-            console.log(index+1, '-', element);
+            console.log(index+1, '-', element.task);
         })
     }
 
     addNewToDo(){
         this.args.filter((element, index) => {
             if(index === 1){
-                this.todoList.push(element);
+                this.todoList.push(new Todo(element));
             }
         });
     }
@@ -53,11 +56,22 @@ export default class TodoApp{
         fs.writeFileSync('./data/todos.json', JSON.stringify(this.todoList));
     }
 
+    completeTask(){
+        this.args.filter((element, index) => {
+            if(index === 1){
+                this.todoList[element-1].status = 1;
+            }
+        });
+    }
+
     run(){
         if (this.args.includes('-l')) {
             this.list();
         }else if(this.args.includes('-a')){
             this.addNewToDo();
+            this.saveInFile();
+        }else if(this.args.includes('-c')){
+            this.completeTask();
             this.saveInFile();
         }
     }
